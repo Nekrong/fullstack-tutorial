@@ -8,7 +8,10 @@ import * as BookTripsTypes from './__generated__/BookTrips';
 
 export const BOOK_TRIPS = gql`
   mutation BookTrips($launchIds: [ID]!) {
-    bookTrips(launchIds: $launchIds) {
+    bookTrips(
+    launchIds: $launchIds
+    paymentToken: "tok_visa"
+    ) {
       success
       message
       launches {

@@ -28,11 +28,31 @@ module.exports = {
     },
 
     Mutation: {
-        bookTrips: async (_, { launchIds }, { dataSources }) => {
+        bookTrips: async (_, { launchIds, paymentToken }, { dataSources }) => {
+            console.log('paymentToken',paymentToken);
+
             const results = await dataSources.userAPI.bookTrips({ launchIds });
             const launches = await dataSources.launchAPI.getLaunchesByIds({
                 launchIds,
             });
+
+            let charge;
+
+            if(launches.length){
+                const stripe = require('stripe')('sk_test_51Hw2p1BEWOg7a8XBPP2ujx8e6cZwZGb17bmHgpICEuq4pp4Pyx4a02Es9JZ7HlNkZWTJKnKyvp5Pk92u3F3qnbkn006NckHnNP');
+                try{
+                    charge = await stripe.charges.create({
+                        amount: 1000000 * launches.length,
+                        currency: 'usd',
+                        source: paymentToken,
+                        description: 'SpaceX launches booking',
+                    });
+                } catch (error){
+                    throw new Error(error);
+                }
+            }
+
+
 
             return {
                 success: results && results.length === launchIds.length,
@@ -43,6 +63,7 @@ module.exports = {
                         id => !results.includes(id),
                         )}`,
                 launches,
+                charge,
             };
         },
         cancelTrip: async (_, { launchId }, { dataSources }) => {
@@ -96,4 +117,7 @@ module.exports = {
             );
         },
     },
+    Charge:{
+        amount: ({amount }) => amount /100,
+    }
 };

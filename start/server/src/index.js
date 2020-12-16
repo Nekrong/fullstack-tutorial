@@ -3,6 +3,8 @@ const typeDefs = require('./schema');
 const { createStore } = require('./utils');
 const resolvers = require('./resolvers');
 
+console.log(process.env.STRIPE_SECRET_API_KEY);
+
 const LaunchAPI = require('./datasources/launch');
 const UserAPI = require('./datasources/user');
 
