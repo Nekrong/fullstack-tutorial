@@ -6,6 +6,11 @@ import { CartItem, BookTrips } from '../containers';
 import { RouteComponentProps } from '@reach/router';
 import { GetCartItems } from './__generated__/GetCartItems';
 
+import {Elements} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('pk_test_51Hw2p1BEWOg7a8XB3GoUshgxXFEu4L0w2HE6I0iEb5a7seyepjGFNWlnVqF73TsMFVi921sxeI1jgFwKhzYl3kD0003jlN5Vnp');
+
 export const GET_CART_ITEMS = gql`
   query GetCartItems {
     cartItems @client
@@ -32,7 +37,9 @@ const Cart: React.FC<CartProps> = () => {
               {data?.cartItems.map((launchId: any) => (
                   <CartItem key={launchId} launchId={launchId} />
               ))}
-              <BookTrips cartItems={data?.cartItems || []} />
+                <Elements stripe={stripePromise}>
+                    <BookTrips cartItems={data?.cartItems || []} />
+                </Elements>
             </Fragment>
         )}
       </Fragment>

@@ -37,12 +37,12 @@ module.exports = {
             });
 
             let charge;
-
+            console.log('paymentToken'+paymentToken)
             if(launches.length){
                 const stripe = require('stripe')('sk_test_51Hw2p1BEWOg7a8XBPP2ujx8e6cZwZGb17bmHgpICEuq4pp4Pyx4a02Es9JZ7HlNkZWTJKnKyvp5Pk92u3F3qnbkn006NckHnNP');
                 try{
                     charge = await stripe.charges.create({
-                        amount: 1000000 * launches.length,
+                        amount: 1000 * launches.length,
                         currency: 'usd',
                         source: paymentToken,
                         description: 'SpaceX launches booking',

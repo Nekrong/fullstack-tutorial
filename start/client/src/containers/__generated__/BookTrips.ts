@@ -17,6 +17,24 @@ export interface BookTrips_bookTrips {
   success: boolean;
   message: string | null;
   launches: (BookTrips_bookTrips_launches | null)[] | null;
+  charge: BookTrips_bookTrips_charge| null;
+}
+
+export interface BookTrips_bookTrips_charge {
+  __typename: "Charge";
+  amount: Number
+  currency: ChargeCurrency
+  status: ChargeStatus
+}
+
+enum ChargeCurrency{
+  usd
+}
+
+enum ChargeStatus {
+  succeeded,
+  pending,
+  failed
 }
 
 export interface BookTrips {
@@ -25,4 +43,5 @@ export interface BookTrips {
 
 export interface BookTripsVariables {
   launchIds: (string | null)[];
+  payToken: string | null;
 }
